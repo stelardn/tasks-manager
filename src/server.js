@@ -1,37 +1,27 @@
 import http from 'node:http';
 
-import { randomUUID as random } from 'node:crypto'
-
-import { Database } from '../database/index.js';
 import { reqBodyToJson } from './middlewares/reqBodyToJson.js';
-const database = new Database();
+import { routes } from './routes.js';
+import { extractQueryParams } from './utils/extractQueryParams.js';
 
 const server = http.createServer(async (req, res) => {
     const { method, url } = req;
 
     await reqBodyToJson(req, res);
 
-    if(url === '/tasks' && method === 'POST') {
-        const { title, description } = req.body;
+    const currentRoute = routes.find(route => route.url.test(url) && route.method === method);
 
-        const newTask = {
-            title,
-            description,
-            id: random(),
-            created_at: new Date(),
-            updated_at: null,
-            completed_at: null
-        }
+    if(currentRoute) {
+        const queryAndRouteParams = req.url.match(currentRoute.url)
 
-        database.insert('tasks', newTask);
+        const { query, ...params } = queryAndRouteParams.groups
 
-        res.end();
-    }
-
-    if(url === '/tasks' && method === 'GET') {
-        const data = database.select('tasks');
-
-        res.end(JSON.stringify(data));
+        req.query = query ? extractQueryParams(query) : {}
+        req.params = params
+        
+        await currentRoute.action(req, res)
+    } else {
+        res.writeHead(404).end()
     }
 
     res.end();
