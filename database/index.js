@@ -36,7 +36,18 @@ export class Database {
     }
 
     update(table, filter, data) {
+        const rowToUpdate = this.#database[table].findIndex(row => row[Object.keys(filter)[0]] === filter[Object.keys(filter)[0]]);
 
+        console.log(rowToUpdate);
+        
+        if(rowToUpdate >= 0) {
+            this.#database[table][rowToUpdate] = {
+                ...this.#database[table][rowToUpdate],
+                ...data
+            }
+        }
+
+        this.#persist();
     }
 
     delete(table, filter) {
