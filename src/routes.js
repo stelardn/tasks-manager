@@ -43,7 +43,6 @@ export const routes = [
         method: 'DELETE',
         action: async (req, res) => {
             const id = req.params.id;
-            console.log(id);
 
             database.delete('tasks', {id})
         }

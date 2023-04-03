@@ -41,9 +41,6 @@ export class Database {
 
     delete(table, filter) {
         const rowToDelete = this.#database[table].findIndex(row => row[Object.keys(filter)[0]] === filter[Object.keys(filter)[0]]);
-
-        // console.log(row[Object.keys(filter)[0]]);
-        console.log(rowToDelete);
         
         if(rowToDelete >= 0) {
             this.#database[table].splice(rowToDelete, 1);
