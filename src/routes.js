@@ -67,5 +67,21 @@ export const routes = [
             res.end();
 
         }
+    },
+    {
+        url: buildRoutePath('/tasks/:id/complete'),
+        method: 'PATCH',
+        action: async (req, res) => {
+            const id = req.params.id;
+
+            const newData = {
+                completed_at: new Date(),
+            }
+        
+            database.update('tasks', {id}, newData)
+        
+            res.end();
+
+        }
     }
 ]
