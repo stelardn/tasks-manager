@@ -43,9 +43,12 @@ export class Database {
                 ...this.#database[table][rowToUpdate],
                 ...data
             }
+            this.#persist();
+            return true
+        } else {
+            return false
         }
 
-        this.#persist();
     }
 
     delete(table, filter) {
@@ -53,8 +56,11 @@ export class Database {
         
         if(rowToDelete >= 0) {
             this.#database[table].splice(rowToDelete, 1);
+            this.#persist();
+            return true
+        } else {
+            return false
         }
 
-        this.#persist();
     }
 }

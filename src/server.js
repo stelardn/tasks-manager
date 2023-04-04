@@ -3,6 +3,7 @@ import http from 'node:http';
 import { reqBodyToJson } from './middlewares/reqBodyToJson.js';
 import { routes } from './routes.js';
 import { extractQueryParams } from './utils/extractQueryParams.js';
+import { createTasksFromCsv } from './utils/importCsv.js';
 
 const server = http.createServer(async (req, res) => {
     const { method, url } = req;
@@ -30,4 +31,5 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(3333, () => {
     console.log('Server running.');
+    createTasksFromCsv()
 });

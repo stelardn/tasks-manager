@@ -44,7 +44,13 @@ export const routes = [
         action: async (req, res) => {
             const id = req.params.id;
 
-            database.delete('tasks', {id})
+            const result = database.delete('tasks', {id})
+
+            if(result) {
+                res.end()
+            } else {
+                res.writeHead(200).end('Não foram encontrados registros.')
+            }
         }
     },
     {
@@ -62,10 +68,14 @@ export const routes = [
                 completed_at: null
             }
         
-            database.update('tasks', {id}, newData)
-        
-            res.end();
+            const result = database.update('tasks', {id}, newData)
 
+            if(result) {
+                res.end()
+            } else {
+                res.writeHead(200).end('Não foram encontrados registros.')
+            }
+        
         }
     },
     {
@@ -78,9 +88,13 @@ export const routes = [
                 completed_at: new Date(),
             }
         
-            database.update('tasks', {id}, newData)
+            const result = database.update('tasks', {id}, newData)
         
-            res.end();
+            if(result) {
+                res.end()
+            } else {
+                res.writeHead(200).end('Não foram encontrados registros.')
+            }
 
         }
     }
